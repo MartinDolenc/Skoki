@@ -79,9 +79,9 @@ for l in ip:
 #print(ime)
 #print(priimek)
 
-raw_data = {'FIS CODE': fisCodes, 'IME' : ime, 'PRIIMEK' : priimek, 'ROJSTVO' : rojstvo, 'KLUB' : klub, 'SMUCKE' : smucke, 'STATUS': status}
+raw_data = {'FIS CODE': fisCodes, 'IME' : ime, 'PRIIMEK' : priimek, 'ROJSTVO' : rojstvo, 'DRZAVA' : drzava, 'KLUB' : klub, 'SMUCKE' : smucke, 'STATUS': status}
 
-df = pd.DataFrame(raw_data, columns = ['FIS CODE', 'IME', 'PRIIMEK', 'ROJSTVO', 'KLUB', 'SMUCKE', 'STATUS'])
+df = pd.DataFrame(raw_data, columns = ['FIS CODE', 'IME', 'PRIIMEK', 'DRZAVA', 'ROJSTVO', 'KLUB', 'SMUCKE', 'STATUS'])
 
 #engine = sqlalchemy.create_engine('mysql+pymysql://root:@localhost:3306/application')
 
