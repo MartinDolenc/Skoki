@@ -46,7 +46,7 @@ if len([text(r).replace('*', '').strip() for r in stran.xpath("//div[@class='g-l
     drzava = drzava[2:]
 
     drzava = list(itertools.chain(*zip(drzava, drzava)))
-    '''
+    
     print(ranki)
     print(startnaStevilka)
     print(fisCode)
@@ -55,7 +55,7 @@ if len([text(r).replace('*', '').strip() for r in stran.xpath("//div[@class='g-l
     print(rezultati)
     print(serija)
     print(mesto_v_ekipi)
-'''
+
     print([len(ranki), len(startnaStevilka), len(fisCode), len(drzava), len(skoki), len(rezultati), len(serija), len(mesto_v_ekipi)])
 
 else:
@@ -77,7 +77,7 @@ else:
     mesto_v_ekipi = [''] * len(serija)
 
     drzava = drzava[2:]
-    '''
+
     print(ranki)
     print(startnaStevilka)
     print(fisCode)
@@ -86,27 +86,28 @@ else:
     print(rezultati)
     print(serija)
     print(mesto_v_ekipi)
-'''
-    print([len(ranki), len(startnaStevilka), len(fisCode), len(drzava), len(skoki), len(rezultati), len(serija), len(mesto_v_ekipi)])
 
+    print([len(ranki), len(startnaStevilka), len(fisCode), len(drzava), len(skoki), len(rezultati), len(serija), len(mesto_v_ekipi)])
 '''
 
 # za ekipno
 
-link = "https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid=4861"
+link = "https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid=2853"
 stran = html.fromstring(requests.get(link).content)
 
 ranki = [text(r).replace('*', '').strip() for r in stran.xpath("//div[@class='g-lg-1 g-md-1 g-sm-1 g-xs-2 justify-right bold pr-1']")]
 fisCode = [text(r).replace('*', '').strip() for r in stran.xpath("//div[@class='g-lg-2 g-md-2 g-sm-3 hidden-xs justify-right gray pr-1']")]
-skokiInRezultati = [text(r).replace('*', '').strip() for r in stran.xpath("//div[@class='g-lg-2 g-md-2 g-sm-2 justify-right bold hidden-xs']")]
 drzava1 = [text(r).replace('*', '').strip() for r in stran.xpath("//a[@class='table-row table-row_theme_main']")]
+skokiInRezultati = [text(r).replace('*', '').strip() for r in stran.xpath("//a[@class='table-row table-row_theme_additional']//div[@class='g-lg-2 g-md-2 g-sm-2 justify-right bold hidden-xs']")]
+
+ranki = list(itertools.chain(*zip(ranki,ranki)))
+ranki = list(itertools.chain(*zip(ranki,ranki)))
+ranki = list(itertools.chain(*zip(ranki,ranki)))
+
+print(len(skokiInRezultati))
 
 skoki = skokiInRezultati[0:][::2]
 rezultati = skokiInRezultati[1:][::2]
-
-ranki = list(itertools.chain(*zip(ranki,ranki)))
-ranki = list(itertools.chain(*zip(ranki,ranki)))
-ranki = list(itertools.chain(*zip(ranki,ranki)))
 
 fisCodeReal = []
 
@@ -120,8 +121,8 @@ serija = list(itertools.chain(*zip(['1']*(len(ranki)//2),['2']*(len(ranki)//2)))
 mesto_v_ekipi = ['1', '2', '3', '4']*(len(ranki)//8)
 mesto_v_ekipi = list(itertools.chain(*zip(mesto_v_ekipi,mesto_v_ekipi)))
 
-rezultati = list(filter(None, rezultati))
-skoki = list(filter(None, skoki))
+#rezultati = list(filter(None, rezultati))
+#skoki = list(filter(None, skoki))
 
 startnaStevilka = ['']*len(ranki)
 
@@ -144,14 +145,7 @@ print(rezultati)
 print(serija)
 print(mesto_v_ekipi)
 
-print(len(ranki))
-print(len(startnaStevilka))
-print(len(fisCode))
-print(len(drzava))
-print(len(skoki))
-print(len(rezultati))
-print(len(serija))
-print(len(mesto_v_ekipi))
+print([len(ranki), len(startnaStevilka), len(fisCode), len(drzava), len(skoki), len(rezultati), len(serija), len(mesto_v_ekipi)])
 '''
 
 #link = "https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid=4862"

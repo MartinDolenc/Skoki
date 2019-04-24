@@ -19,30 +19,45 @@ def text(tag):
 # ekipno
 # Naslov, od koder pobiramo podatke
 # tekmovalci se razlikujejo samo za "competitorid"
+
 link = "https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid=4861"
+
 stran = html.fromstring(requests.get(link).content)
 
-link = [r.get("href") for r in stran.xpath("//a[@class='table-row table-row_theme_additional']")]
+linkTek = [r.get("href") for r in stran.xpath("//a[@class='table-row table-row_theme_additional']")]
 
 
-print(link)
-print(len(link))
+print(linkTek)
+print(len(linkTek))
 '''
-
-
 # posamezno
 # Naslov, od koder pobiramo podatke
 # tekmovalci se razlikujejo samo za "competitorid"
-link = "https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid=5045"
+link = "https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid=4879"
+
 stran = html.fromstring(requests.get(link).content)
 
-# Preberemo prvo ustrezno tabelo
-#tabela = [[text(c).replace('*', '').strip() for c in r.xpath("(th|td)")]
-#          for r in  stran.xpath("//div[@class='table__body']")[0]
-#                         .xpath("//div[@class='g-lg g-md g-sm-24 g-xs-24 justify-left']")]
+linkTek = [r.get("href") for r in stran.xpath("//div[@id='events-info-results']//a[@class='table-row']")]
 
-link = [r.get("href") for r in stran.xpath("//div[@id='events-info-results']")[0]
-                .xpath("//a[@class='table-row']")]
+for l in linkTek:
+    stran = html.fromstring(requests.get(l).content)
 
-print(link)
-print(len(link))
+    tabela = [text(r).replace('*', '').strip() for r in stran.xpath("//span[@class='profile-info__value']")]
+
+    imePriimek = [text(r).replace('*', '').strip() for r in stran.xpath("//h1[@class='athlete-profile__name']")][0]
+
+    klub = [text(r).replace('*', '').strip() for r in stran.xpath("//div[@class='athlete-profile__team spacer__section']")][0]
+
+    drzava = [text(r).replace('*', '').strip() for r in stran.xpath("//span[@class='country__name-short']")][0]
+
+    ime = imePriimek.rsplit(' ', 1)[0]
+    priimek = imePriimek.rsplit(' ', 1)[1]
+
+    fisCode = tabela[0]
+    status = tabela[3]
+    rojstvo = tabela[1]
+    smucke = tabela[-2]
+
+    print([status, fisCode, ime, priimek, drzava, rojstvo, klub, smucke])
+
+

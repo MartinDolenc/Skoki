@@ -38,21 +38,26 @@ for mes in listMesecevZS:
     stran = html.fromstring(requests.get(link).content)
 '''
 
-link = "https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=2018&categorycode=&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=07-2017&saveselection=-1&seasonselection="
+link = "https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=2010&categorycode=&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=12-2009&saveselection=-1&seasonselection="
+
 stran = html.fromstring(requests.get(link).content)
 
-kraj1 = [text(r).replace('*', '').strip() for r in  stran.xpath("//div[@class='container pr-xs-0']")[0]
-                         .xpath("//span[@class='bold clip-xs']")]
+kraj1 = [text(r).replace('*', '').strip() for r in  stran.xpath("//span[@class='bold clip-xs']")]
 
-drzava1 = [text(r).replace('*', '').strip() for r in  stran.xpath("//div[@class='container pr-xs-0']")[0]
-                         .xpath("//span[@class='country__name-short']")]
+drzava1 = [text(r).replace('*', '').strip() for r in  stran.xpath("//span[@class='country__name-short']")]
 
-datum1 = [text(r).replace('*', '').strip() for r in  stran.xpath("//div[@class='container pr-xs-0']")[0]
-                         .xpath("//a[@class='pl-1 pl-sm-0 px-xs-0 g-lg-4 g-md-4 g-sm-3 g-xs-5 justify-left']")]
+allEventLinks = [r.get("href") for r in stran.xpath("//a[@class='pr-1 g-lg-1 g-md-1 g-sm-2 hidden-xs justify-left']")]
 
-#eventID = [text(r).replace('*', '').strip() for r in  stran.xpath("//a[@class='pr-1 g-lg-1 g-md-1 g-sm-2 hidden-xs justify-left']")[0].get("href")]
+cancelledEventLinks = [r.get("href") for r in stran.xpath("//a[@class='g-sm justify-left hidden-xs hidden-md-up bold cancelled']")]
 
-eventLink = [r.get("href") for r in stran.xpath("//a[@class='pr-1 g-lg-1 g-md-1 g-sm-2 hidden-xs justify-left']")]
+eventLink = []
+
+for str in allEventLinks:
+    if str not in cancelledEventLinks:
+        eventLink.append(str)
+
+print(kraj1)
+print(eventLink)
 
 y = 0
 
@@ -89,17 +94,13 @@ for str in eventLink:
 
     #eventID.append([text(r).replace('*', '').strip() for r in stran.xpath("//a[@class='g-lg-2 g-md-2 g-sm-3 g-xs-4 justify-center']")[0].get("href")])
 
+print(kraj)
+print(drzava)
+print(datum)
+print(id)
 
-#print(kraj)
-#print(drzava)
-#print(datum)
-#print(id)
-
-#print(len(kraj))
-#print(len(drzava))
-#print(len(datum))
-#print(len(id))
-
+print(len(kraj), len(drzava), len(datum), len(id))
+'''
 raw_data = {'ID' : id, 'KRAJ' : kraj, 'DATUM' : datum, 'DRZAVA' : drzava}
 
 df = pd.DataFrame(raw_data, columns = ['ID', 'KRAJ', 'DATUM', 'DRZAVA'])
@@ -242,3 +243,5 @@ dfR = pd.DataFrame(raw_dataR, columns = ['ID', 'RANKI', 'STARTNA STEVILKA', 'FIS
              'TOCKE', 'SERIJA', 'MESTO V EKIPI'])
 
 dfR.to_sql('REZULTAT', sqlite3.Connection('Skoki.db'))
+
+'''
