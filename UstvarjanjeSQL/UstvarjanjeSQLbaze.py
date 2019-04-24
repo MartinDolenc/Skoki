@@ -170,7 +170,7 @@ def sestaviBazo(stran):
                     # rezultati = rezultati[:len(drzava)]
                     ranki = ranki[:len(drzava)]
                     fisCode = fisCode[:len(drzava)]
-                    startnaStevilka = startnaStevilka[:len(startnaStevilka)]
+                    startnaStevilka = startnaStevilka[:len(drzava)]
 
                     ranki = list(itertools.chain(*zip(ranki, ranki)))
                     startnaStevilka = list(itertools.chain(*zip(startnaStevilka, startnaStevilka)))
@@ -208,7 +208,7 @@ def sestaviBazo(stran):
 
                     ranki = ranki[:len(drzava)]
                     fisCode = fisCode[:len(drzava)]
-                    startnaStevilka = startnaStevilka[:len(startnaStevilka)]
+                    startnaStevilka = startnaStevilka[:len(drzava)]
 
                     serija = ['1'] * len(ranki)
                     mesto_v_ekipi = [''] * len(serija)
