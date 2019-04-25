@@ -13,7 +13,7 @@ from datetime import datetime
 bottle.debug(True)
 
 # Datoteka, v kateri je baza
-baza_datoteka = "Skoki.db"
+baza_datoteka = "Skoki_test.db"
 
 # Mapa s statičnimi datotekami
 static_dir = "./static"
