@@ -168,7 +168,7 @@ def sestaviBazo(stran):
                     #rezultati = rezultati[:len(drzava)]
                     ranki = ranki[:len(drzava)]
                     fisCode = fisCode[:len(drzava)]
-                    startnaStevilka = fisCode[:len(startnaStevilka)]
+                    startnaStevilka = startnaStevilka[:len(drzava)]
 
                     ranki = list(itertools.chain(*zip(ranki, ranki)))
                     startnaStevilka = list(itertools.chain(*zip(startnaStevilka, startnaStevilka)))
@@ -206,7 +206,7 @@ def sestaviBazo(stran):
 
                     ranki = ranki[:len(drzava)]
                     fisCode = fisCode[:len(drzava)]
-                    startnaStevilka = fisCode[:len(startnaStevilka)]
+                    startnaStevilka = startnaStevilka[:len(drzava)]
 
                     serija = ['1'] * len(ranki)
                     mesto_v_ekipi = [''] * len(serija)
@@ -288,7 +288,7 @@ listMesecevZS = ['01-', '02-', '03-', '04-', '05-', '06-']
 x = 2018
 
 print(x)
-mes = '11-'
+mes = '07-'
 link = "https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=" + str(
     x) + "&categorycode=&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=" + mes + str(
     x - 1) + "&saveselection=-1&seasonselection="

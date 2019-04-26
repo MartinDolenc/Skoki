@@ -22,23 +22,9 @@ def text(tag):
 
 # koda za neko sezono:
 
-sezona = 2018
+sezona = 2015
 
-listMesecevPS = ['07-', '08-', '09-', '10-', '11-', '12-']
-listMesecevZS = ['01-', '02-', '03-', '04-', '05-', '06-']
-
-'''
-for mes in listMesecevPS:
-    link = "https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=" + str(sezona) + "&categorycode=&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=" + mes + str(sezona-1) + "&saveselection=-1&seasonselection="
-    stran = html.fromstring(requests.get(link).content)
-
-
-for mes in listMesecevZS:
-    link = "https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=" + str(sezona) + "&categorycode=&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=" + mes + str(sezona) + "&saveselection=-1&seasonselection="
-    stran = html.fromstring(requests.get(link).content)
-'''
-
-link = "https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=2010&categorycode=&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=12-2009&saveselection=-1&seasonselection="
+link = "https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=" + str(sezona) + "&categorycode=WC&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=X-" + str(sezona) + "&saveselection=-1&seasonselection="
 
 stran = html.fromstring(requests.get(link).content)
 
@@ -52,12 +38,21 @@ cancelledEventLinks = [r.get("href") for r in stran.xpath("//a[@class='g-sm just
 
 eventLink = []
 
-for str in allEventLinks:
-    if str not in cancelledEventLinks:
-        eventLink.append(str)
+for i in range(0, len(allEventLinks)):
+    if allEventLinks[i] not in cancelledEventLinks:
+        eventLink.append(allEventLinks[i])
+    else:
+        del drzava1[i]
 
-print(kraj1)
-print(eventLink)
+for d in range(0, len(drzava1)):
+    if drzava1[d] == 'FIS':
+        drzava1[d] = ''
+        kraj1[d] = ''
+        eventLink[d] = ''
+
+drzava1 = list(filter(None, drzava1))
+kraj1 = list(filter(None, kraj1))
+eventLink = list(filter(None, eventLink))
 
 y = 0
 
@@ -65,6 +60,7 @@ kraj = []
 drzava = []
 datum = []
 id = []
+tip_tekme = []
 
 for str in eventLink:
     stran = html.fromstring(requests.get(str).content)
@@ -79,8 +75,12 @@ for str in eventLink:
 
         if (spoli[i] == 'M'):
             links.append(stran.xpath("//a[@class='g-sm-8 g-xs-9 hidden-md-up']")[i].get("href"))
-            neki = [text(r).replace('*', '').strip() for r in stran.xpath("//a[@class='px-md-1 px-lg-1 pl-xs-1 g-lg-2 g-md-3 g-sm-2 g-xs-4 justify-left']")[i]]
-            datum += neki
+            datum += [text(r).replace('*', '').strip() for r in stran.xpath("//a[@class='px-md-1 px-lg-1 pl-xs-1 g-lg-2 g-md-3 g-sm-2 g-xs-4 justify-left']")[i]]
+
+            if 'Team' in [text(r).replace('*', '').strip() for r in stran.xpath("//div[@class='clip']")][0:][::2][i]:
+                tip_tekme.append('Ekipno')
+            else:
+                tip_tekme.append('Posamično')
 
     for l in links:
         linksForReal.append(re.search(r'\d+$', l).group())
@@ -98,8 +98,11 @@ print(kraj)
 print(drzava)
 print(datum)
 print(id)
+print(tip_tekme)
 
-print(len(kraj), len(drzava), len(datum), len(id))
+print(len(kraj), len(drzava), len(datum), len(id), len(tip_tekme))
+
+
 '''
 raw_data = {'ID' : id, 'KRAJ' : kraj, 'DATUM' : datum, 'DRZAVA' : drzava}
 

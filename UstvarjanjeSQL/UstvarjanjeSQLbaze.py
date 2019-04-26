@@ -15,16 +15,13 @@ def text(tag):
         parts.insert(0, ' ')
     return re.sub(r'\s+', ' ', ''.join(filter(None, parts)))
 
-#   https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=2019&categorycode=&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=07-2018&saveselection=-1&seasonselection=
-#   https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=2016&categorycode=&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=12-2015&saveselection=-1&seasonselection=
-#
-#   mesci za neko sezono x grejo od 07-(x-1) do 06-x
-
-baza = 'Skoki_test.db'
+baza = 'Skoki_test_2009-19.db'
 
 drzavaDrzava = []
 
-bananiID = ['5000']
+bananiID = ['5000', '2797', '2866', '3484', '4141', '4183', '4174', '4168', '4398', '4403', '4424', '4427',
+            '4434', '4443', '4580', '4454', '4457', '4460', '4698', '4718', '4721', '4733', '4736', '4858',
+            '4740', '4744', '4936', '5230']
 
 def sestaviBazo(stran):
     kraj1 = [text(r).replace('*', '').strip() for r in stran.xpath("//span[@class='bold clip-xs']")]
@@ -39,9 +36,21 @@ def sestaviBazo(stran):
 
     eventLink = []
 
-    for str in allEventLinks:
-        if str not in cancelledEventLinks:
-            eventLink.append(str)
+    for i in range(0, len(allEventLinks)):
+        if allEventLinks[i] not in cancelledEventLinks:
+            eventLink.append(allEventLinks[i])
+        else:
+            del drzava1[i]
+
+    for d in range(0, len(drzava1)):
+        if drzava1[d] == 'FIS':
+            drzava1[d] = ''
+            kraj1[d] = ''
+            eventLink[d] = ''
+
+    drzava1 = list(filter(None, drzava1))
+    kraj1 = list(filter(None, kraj1))
+    eventLink = list(filter(None, eventLink))
 
     y = 0
 
@@ -49,6 +58,7 @@ def sestaviBazo(stran):
     drzava = []
     datum = []
     id = []
+    tip_tekme = []
 
     for str in eventLink:
         stran = html.fromstring(requests.get(str).content)
@@ -63,9 +73,13 @@ def sestaviBazo(stran):
 
             if (spoli[i] == 'M'):
                 links.append(stran.xpath("//a[@class='g-sm-8 g-xs-9 hidden-md-up']")[i].get("href"))
-                neki = [text(r).replace('*', '').strip() for r in
+                datum += [text(r).replace('*', '').strip() for r in
                         stran.xpath("//a[@class='px-md-1 px-lg-1 pl-xs-1 g-lg-2 g-md-3 g-sm-2 g-xs-4 justify-left']")[i]]
-                datum += neki
+
+                if 'Team' in [text(r).replace('*', '').strip() for r in stran.xpath("//div[@class='clip']")][0:][::2][i]:
+                    tip_tekme.append('Ekipno')
+                else:
+                    tip_tekme.append('Posamično')
 
         for l in links:
             linksForReal.append(re.search(r'\d+$', l).group())
@@ -77,9 +91,9 @@ def sestaviBazo(stran):
         y += 1
         id += linksForReal
 
-    raw_data = {'ID': id, 'KRAJ': kraj, 'DATUM': datum, 'DRZAVA': drzava}
+    raw_data = {'ID': id, 'KRAJ': kraj, 'DATUM': datum, 'DRZAVA': drzava, 'TIP TEKME' : tip_tekme}
 
-    df = pd.DataFrame(raw_data, columns=['ID', 'KRAJ', 'DATUM', 'DRZAVA'])
+    df = pd.DataFrame(raw_data, columns=['ID', 'KRAJ', 'DATUM', 'DRZAVA', 'TIP TEKME'])
 
     df.to_sql('TEKMA', sqlite3.Connection(baza), if_exists='append')
 
@@ -101,46 +115,94 @@ def sestaviBazo(stran):
             stran = html.fromstring(requests.get(link).content)
 
             if 'Team' in [text(r).replace('*', '').strip() for r in stran.xpath("//div[@class='event-header__kind']")][0]:
-                ranki = [text(r).replace('*', '').strip() for r in
-                         stran.xpath("//div[@class='g-lg-1 g-md-1 g-sm-1 g-xs-2 justify-right bold pr-1']")]
-                fisCode = [text(r).replace('*', '').strip() for r in
-                           stran.xpath("//div[@class='g-lg-2 g-md-2 g-sm-3 hidden-xs justify-right gray pr-1']")]
-                skokiInRezultati = [text(r).replace('*', '').strip() for r in stran.xpath(
-                    "//a[@class='table-row table-row_theme_additional']//div[@class='g-lg-2 g-md-2 g-sm-2 justify-right bold hidden-xs']")]
+                if len([text(r).replace('*', '').strip() for r in
+                        stran.xpath(
+                            "//div[@class='g-lg-2 g-md-2 g-sm-2 justify-right hidden-xs text-right pale']")]) > 2:
 
-                drzava1 = [text(r).replace('*', '').strip() for r in
-                           stran.xpath("//a[@class='table-row table-row_theme_main']")]
+                    ranki = [text(r).replace('*', '').strip() for r in
+                             stran.xpath("//div[@class='g-lg-1 g-md-1 g-sm-1 g-xs-2 justify-right bold pr-1']")]
+                    fisCode = [text(r).replace('*', '').strip() for r in
+                               stran.xpath("//div[@class='g-lg-2 g-md-2 g-sm-3 hidden-xs justify-right gray pr-1']")]
+                    drzava1 = [text(r).replace('*', '').strip() for r in
+                               stran.xpath("//a[@class='table-row table-row_theme_main']")]
+                    skokiInRezultati = [text(r).replace('*', '').strip() for r in stran.xpath(
+                        "//a[@class='table-row table-row_theme_additional']//div[@class='g-lg-2 g-md-2 g-sm-2 justify-right bold hidden-xs']")]
 
-                skoki = skokiInRezultati[0:][::2]
-                rezultati = skokiInRezultati[1:][::2]
+                    ranki = list(itertools.chain(*zip(ranki, ranki)))
+                    ranki = list(itertools.chain(*zip(ranki, ranki)))
+                    ranki = list(itertools.chain(*zip(ranki, ranki)))
 
-                ranki = list(itertools.chain(*zip(ranki, ranki)))
-                ranki = list(itertools.chain(*zip(ranki, ranki)))
-                ranki = list(itertools.chain(*zip(ranki, ranki)))
+                    print(len(skokiInRezultati))
 
-                fisCodeReal = []
+                    skoki = skokiInRezultati[0:][::2]
+                    rezultati = skokiInRezultati[1:][::2]
 
-                for str in fisCode:
-                    if len(str) == 4:
-                        fisCodeReal.append(str)
+                    fisCodeReal = []
 
-                fisCodeReal = list(itertools.chain(*zip(fisCodeReal, fisCodeReal)))
+                    for str in fisCode:
+                        if len(str) == 4:
+                            fisCodeReal.append(str)
 
-                serija = list(itertools.chain(*zip(['1'] * (len(ranki) // 2), ['2'] * (len(ranki) // 2))))
-                mesto_v_ekipi = ['1', '2', '3', '4'] * (len(ranki) // 8)
-                mesto_v_ekipi = list(itertools.chain(*zip(mesto_v_ekipi, mesto_v_ekipi)))
+                    fisCodeReal = list(itertools.chain(*zip(fisCodeReal, fisCodeReal)))
 
-                startnaStevilka = [''] * len(ranki)
+                    serija = list(itertools.chain(*zip(['1'] * (len(ranki) // 2), ['2'] * (len(ranki) // 2))))
+                    mesto_v_ekipi = ['1', '2', '3', '4'] * (len(ranki) // 8)
+                    mesto_v_ekipi = list(itertools.chain(*zip(mesto_v_ekipi, mesto_v_ekipi)))
 
-                drzava = []
-                for str in drzava1:
-                    drzava.append(str.split()[-2])
+                    # rezultati = list(filter(None, rezultati))
+                    # skoki = list(filter(None, skoki))
 
-                drzava = list(itertools.chain(*zip(drzava, drzava)))
-                drzava = list(itertools.chain(*zip(drzava, drzava)))
-                drzava = list(itertools.chain(*zip(drzava, drzava)))
+                    startnaStevilka = [''] * len(ranki)
 
-                fisCode = fisCodeReal
+                    drzava = []
+                    for str in drzava1:
+                        drzava.append(str.split()[-2])
+
+                    drzava = list(itertools.chain(*zip(drzava, drzava)))
+                    drzava = list(itertools.chain(*zip(drzava, drzava)))
+                    drzava = list(itertools.chain(*zip(drzava, drzava)))
+
+                    fisCode = fisCodeReal
+                else:
+                    ranki = [text(r).replace('*', '').strip() for r in
+                             stran.xpath("//div[@class='g-lg-1 g-md-1 g-sm-1 g-xs-2 justify-right bold pr-1']")]
+                    fisCode = [text(r).replace('*', '').strip() for r in
+                               stran.xpath("//div[@class='g-lg-2 g-md-2 g-sm-3 hidden-xs justify-right gray pr-1']")]
+                    drzava1 = [text(r).replace('*', '').strip() for r in
+                               stran.xpath("//a[@class='table-row table-row_theme_main']")]
+                    skokiInRezultati = [text(r).replace('*', '').strip() for r in stran.xpath(
+                        "//a[@class='table-row table-row_theme_additional']//div[@class='g-lg-2 g-md-2 g-sm-2 justify-right bold hidden-xs']")]
+
+                    ranki = list(itertools.chain(*zip(ranki, ranki)))
+                    ranki = list(itertools.chain(*zip(ranki, ranki)))
+
+                    print(len(skokiInRezultati))
+
+                    skoki = skokiInRezultati[0:][::2]
+                    rezultati = skokiInRezultati[1:][::2]
+
+                    fisCodeReal = []
+
+                    for str in fisCode:
+                        if len(str) == 4:
+                            fisCodeReal.append(str)
+
+                    serija = ['1'] * len(ranki)
+                    mesto_v_ekipi = ['1', '2', '3', '4'] * (len(ranki) // 4)
+
+                    # rezultati = list(filter(None, rezultati))
+                    # skoki = list(filter(None, skoki))
+
+                    startnaStevilka = [''] * len(ranki)
+
+                    drzava = []
+                    for str in drzava1:
+                        drzava.append(str.split()[-2])
+
+                    drzava = list(itertools.chain(*zip(drzava, drzava)))
+                    drzava = list(itertools.chain(*zip(drzava, drzava)))
+
+                    fisCode = fisCodeReal
 
                 dobiTekmovalcaIzTekme(
                     [r.get("href") for r in stran.xpath("//a[@class='table-row table-row_theme_additional']")])
@@ -227,6 +289,29 @@ def sestaviBazo(stran):
                 serijaR += serija
                 mesto_v_ekipiR += mesto_v_ekipi
 
+            else:
+                serija = ['3'] * len(ranki)
+
+                rez = [text(r).replace('*', '').strip() for r in
+                       stran.xpath("//div[@class='g-lg-2 g-md-2 g-sm-3 g-xs-5 justify-right blue bold ']")]
+
+                rezultati = rez[:len(serija)]
+
+                skoki = [''] * len(serija)
+
+                idR += [i] * len(ranki)
+                rankiR += ranki
+                startnaStevilkaR += startnaStevilka
+                fisCodeR += fisCode
+                drzavaR += drzava
+                skokiR += skoki
+                tockeR += rezultati
+                serijaR += serija
+                mesto_v_ekipiR += mesto_v_ekipi
+
+            print(len(idR), len(rankiR), len(startnaStevilkaR), len(fisCodeR), len(drzavaR), len(skokiR), len(tockeR),
+                  len(serijaR), len(mesto_v_ekipiR))
+
     raw_dataR = {'ID': idR, 'RANKI': rankiR, 'STARTNA STEVILKA': startnaStevilkaR, 'FIS CODE': fisCodeR,
                  'DRZAVA': drzavaR, 'SKOKI': skokiR,
                  'TOCKE': tockeR, 'SERIJA': serijaR, 'MESTO V EKIPI': mesto_v_ekipiR}
@@ -279,27 +364,16 @@ def dobiTekmovalcaIzTekme(sezLinku):
         if drzavaTekmovalca not in drzavaDrzava:
             drzavaDrzava.append(drzavaTekmovalca)
 
-listMesecevPS = ['07-', '08-', '09-', '10-', '11-', '12-']
-listMesecevZS = ['01-', '02-', '03-', '04-', '05-', '06-']
 
-x = 2018
+for sezona in range(2009, 2020):
+    print(sezona)
 
-print(x)
-for mes in listMesecevPS:
-    link = "https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=" + str(
-        x) + "&categorycode=&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=" + mes + str(
-        x - 1) + "&saveselection=-1&seasonselection="
-    print(mes)
+    link = "https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=" + str(sezona) + "&categorycode=WC&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=X-" + str(sezona) + "&saveselection=-1&seasonselection="
+
     stran = html.fromstring(requests.get(link).content)
+
     sestaviBazo(stran)
 
-for mes in listMesecevZS:
-    link = "https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=" + str(
-        x) + "&categorycode=&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=" + mes + str(
-        x) + "&saveselection=-1&seasonselection="
-    print(mes)
-    stran = html.fromstring(requests.get(link).content)
-    sestaviBazo(stran)
 
 raw_dataT = {'FIS CODE' : fisCodeTekmovalcev, 'STATUS' : statusTekmovalcev, 'IME' : imeTekmovalcev, 'PRIIMEK' : priimekTekmovalcev,
                   'DRZAVA' : drzavaTekmovalcev, 'ROJSTVO' : rojstvoTekmovalcev, 'KLUB' : klubTekmovalcev, 'SMUCKE' : smuckeTekmovalcev}
@@ -312,4 +386,4 @@ raw_dataD = {'DRZAVA': drzavaDrzava}
 
 dfD = pd.DataFrame(raw_dataD, columns = ['DRZAVA'])
 
-dfD.to_sql('DRZAVA', sqlite3.Connection(baza))
+dfD.to_sql('DRZAVA', sqlite3.Connection(baza), if_exists='append')
