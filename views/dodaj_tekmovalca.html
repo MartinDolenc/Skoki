@@ -1,0 +1,17 @@
+%rebase('osnova.html', naslov='Dodajanje tekmovalca')
+
+%if napaka:
+  <p class="opozorilo">{{napaka}}</p>
+%end
+
+  <form action="/dodaj_tekmovalca" method="POST">
+    <p>FIS code: <input type="integer" name="fis_code" value="{{fis_code}}"></p>
+    <p>Ime: <input type="text" name="ime" value="{{ime}}"></p>
+    <p>Priimek: <input type="text" name="priimek" value="{{priimek}}"></p>
+    <p>Država: <input type="text" name="drzava" value="{{drzava}}"></p>
+    <p>Rojstvo: <input type="text" name="rojstvo" value="{{rojstvo}}"></p>
+    <p>Klub: <input type="text" name="klub" value="{{klub}}"></p>
+    <p>Smuči: <input type="text" name="smucke" value="{{smucke}}"></p>
+    <p>Status: <input type="text" name="status" value="{{status}}"></p>
+    <p><input type="submit" value="Dodaj"></p>
+  </form>

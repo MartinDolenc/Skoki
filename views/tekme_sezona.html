@@ -1,0 +1,24 @@
+%rebase('osnova.html', naslov='Tekme v sezoni {}'.format(x))
+
+  <table cellpadding="0" cellspacing="0" border="1">
+  <tr>
+     <th>ID</th>
+     <th>Kraj</th>
+     <th>Datum</th>
+     <th>Država</th> 
+     <th>Tip tekme</th> 
+  </tr>
+  %for (id,kraj,datum,drzava,tip_tekme) in tekme:
+    <tr>
+       <td>{{id}}</td>
+       <td>{{kraj}}</td>
+       <td>{{datum}}</td>
+       <td>{{drzava}}</td>
+       <td>{{tip_tekme}}</td>
+    </tr>
+  %end
+  </table>
+
+  <p>
+    <a href="/">Tekmovalci</a>
+  </p>

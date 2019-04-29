@@ -1,0 +1,30 @@
+%rebase('osnova.html', naslov='Tekmovalci')
+
+  <table cellpadding="0" cellspacing="0" border="1">
+  <tr>
+     <th>FIS code</th>
+     <th>Status</th>
+     <th>Ime</th>
+     <th>Priimek</th>
+     <th>Država</th>
+     <th>Rojstvo</th>
+     <th>Klub</th>
+     <th>Smučke</th>
+  </tr>
+  %for (fis_code,status,ime,priimek,drzava,rojstvo,klub,smucke) in tekmovalci:
+    <tr>
+       <td>{{fis_code}}</td>
+       <td>{{status}}</td>
+       <td>{{ime}}</td>
+       <td>{{priimek}}</td>
+       <td>{{drzava}}</td>
+       <td>{{rojstvo}}</td>
+       <td>{{klub}}</td>
+       <td>{{smucke}}</td>
+    </tr>
+  %end
+  </table>
+
+  <p>
+    <a href="/dodaj_tekmovalca">Dodaj tekmovalca</a>
+  </p>

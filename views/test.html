@@ -1,0 +1,53 @@
+%rebase('test_osnova.html', naslov='Tekmovalci')
+
+<marquee behavior="scroll" direction="left">Tu je kle sam da se mal považem</marquee>
+<p>
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Dropdown button
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#">Action</a>
+    <a class="dropdown-item" href="#">Another action</a>
+    <a class="dropdown-item" href="#">Something else here</a>
+  </div>
+</div>
+</p>
+<p>
+	<a class="btn btn-default" href="/Login_test" role="button">Login_test</a>
+</p>
+<p>
+	<a class="btn btn-default" href="/Video_test" role="button">Še več važenja</a>
+</p>
+
+<nav class="navbar navbar-dark bg-dark">
+  <form class="form-inline">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  </form>
+</nav>
+
+<table class="table table-bordered table-hover">
+  <tr>
+     <th>FIS code</th>
+     <th>Status</th>
+     <th>Ime</th>
+     <th>Priimek</th>
+     <th>Država</th>
+     <th>Rojstvo</th>
+     <th>Klub</th>
+     <th>Smučke</th>
+  </tr>
+  %for (fis_code,status,ime,priimek,drzava,rojstvo,klub,smucke) in tekmovalci:
+    <tr>
+       <td>{{fis_code}}</td>
+       <td>{{status}}</td>
+       <td>{{ime}}</td>
+       <td>{{priimek}}</td>
+       <td>{{drzava}}</td>
+       <td>{{rojstvo}}</td>
+       <td>{{klub}}</td>
+       <td>{{smucke}}</td>
+    </tr>
+  %end
+</table>
