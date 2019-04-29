@@ -14,13 +14,13 @@
 </div>
 </p>
 <p>
-	<a class="btn btn-default" href="/Login_test" role="button">Login_test</a>
+	<a href="/Login_test" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Login_test</a>
 </p>
 <p>
-	<a class="btn btn-default" href="/Video_test" role="button">Še več važenja</a>
+	<a href="/Video_test" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Še več važenja</a>
 </p>
 
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar">
   <form class="form-inline">
     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -28,16 +28,19 @@
 </nav>
 
 <table class="table table-bordered table-hover">
+ <thead class="thead-dark">
   <tr>
-     <th>FIS code</th>
-     <th>Status</th>
-     <th>Ime</th>
-     <th>Priimek</th>
-     <th>Država</th>
-     <th>Rojstvo</th>
-     <th>Klub</th>
-     <th>Smučke</th>
+     <th scope="col">FIS code</th>
+     <th scope="col">Status</th>
+     <th scope="col">Ime</th>
+     <th scope="col">Priimek</th>
+     <th scope="col">Država</th>
+     <th scope="col">Rojstvo</th>
+     <th scope="col">Klub</th>
+     <th scope="col">Smučke</th>
   </tr>
+  </thead>
+  <tbody>
   %for (fis_code,status,ime,priimek,drzava,rojstvo,klub,smucke) in tekmovalci:
     <tr>
        <td>{{fis_code}}</td>
@@ -50,4 +53,5 @@
        <td>{{smucke}}</td>
     </tr>
   %end
+  </tbody>
 </table>
