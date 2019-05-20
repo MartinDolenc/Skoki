@@ -1,12 +1,172 @@
 <html>
 <head>
   <title>{{naslov}}</title>
-  <link href="/static/style.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Custom styles for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/css/custom.css" rel="stylesheet">
 </head>
 <body>
-  <h2>{{naslov}}</h2>
+
+%if napakaO:
+        <div class="alert alert-warning">{{napakaO}}</div>
+%end
+
+<div class="container">
+  <header class="blog-header py-3">
+    <div class="row flex-nowrap justify-content-between align-items-center">
+      <div class="col-4 text-center">
+      </div>
+      <div class="col-4 text-center">
+        <a class="blog-header-logo text-dark" href="/">Smučarski skoki</a>
+      </div>
+      <div class="col-4 d-flex justify-content-end align-items-center">
+		% if username:
+            % if admin:
+                <a class="nav-item dropdown">
+                  <a class="dropdown-toggle col-4 text-center text-dark" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{username}}
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/dodaj_drzavo">Dodaj državo</a>
+                    <a class="dropdown-item" href="/dodaj_tekmovalca">Dodaj tekmovalca</a>
+                    <a class="dropdown-item" href="/dodaj_tekmo">Dodaj tekmo</a>
+                  </div>
+                </a>
+            % else:
+                <a class="nav-item dropdown">
+                  <a class="dropdown-toggle col-4 text-center text-dark" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{username}}
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#exampleModal">
+                      Postani admin
+                    </button>
+                  </div>
+                </a>
+            % end
+			<a class="btn btn-sm btn-outline-secondary" href="/Logout">Odjava</a>
+		% else:
+			<a class="btn btn-sm btn-outline-secondary" href="/Login">Prijava</a>
+		% end
+      </div>
+    </div>
+  </header>
+  
+  <!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Postani admin v le 3 klikih</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+		  <form class="form-signin" method="post">
+		  <div class="modal-body">
+			<input type="admin password" id="inputPassword" class="form-control" placeholder="Specialno admin geslo" name="adminPassword">
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn btn-primary" type="submit">Postani admin</button>
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		  </div>
+		  </form>
+		</div>
+	  </div>
+	</div>
+
+  <div class="navbar py-1 mb-2">
+    <nav class="nav d-flex justify-content-between">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-muted" id="navbarDropdown" style="cursor: pointer;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Tekme
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/tekme/2009/Datum-DESC">Sezona 2009</a>
+          <a class="dropdown-item" href="/tekme/2010/Datum-DESC">Sezona 2010</a>
+          <a class="dropdown-item" href="/tekme/2011/Datum-DESC">Sezona 2011</a>
+          <a class="dropdown-item" href="/tekme/2012/Datum-DESC">Sezona 2012</a>
+          <a class="dropdown-item" href="/tekme/2013/Datum-DESC">Sezona 2013</a>
+          <a class="dropdown-item" href="/tekme/2014/Datum-DESC">Sezona 2014</a>
+          <a class="dropdown-item" href="/tekme/2015/Datum-DESC">Sezona 2015</a>
+          <a class="dropdown-item" href="/tekme/2016/Datum-DESC">Sezona 2016</a>
+          <a class="dropdown-item" href="/tekme/2017/Datum-DESC">Sezona 2017</a>
+          <a class="dropdown-item" href="/tekme/2018/Datum-DESC">Sezona 2018</a>
+          <a class="dropdown-item" href="/tekme/2019/Datum-DESC">Sezona 2019</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Drugo</a>
+        </div>
+      </li>
+      <a class="p-2 text-muted" href="/tekmovalci/priimek-ASC">Tekmovalci</a>
+      <a class="p-2 text-muted" href="/drzave">Države</a>
+      <a class="p-2 text-muted" href="/zanimivosti/0">Zanimivosti</a>
+    </nav>
+  </div>
 
 {{!base}}
+
+</div>
+
+<!-- jQuery library -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+<!-- Popper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+<!-- Latest compiled and minified Bootstrap JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<!-- Initialize Bootstrap functionality -->
+<script>
+// Initialize tooltip component
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+// Initialize popover component
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("myBtn").style.display = "block";
+  } else {
+    document.getElementById("myBtn").style.display = "none";
+  }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+
+</script>
+  <script src="/static/js/bootstrap.js"></script>
+
+<footer class="page-footer font-small special-color-dark pt-4">
+    <hr style="width: 58%">
+  <div class="container">
+    <ul class="list-unstyled list-inline text-center">
+      <li class="list-inline-item">
+        <a href="/">
+            <img class="mb-4" src="/static/skakalec.png" alt="" style="width:40px;height:40px;">
+        </a>
+      </li>
+    </ul>
+  </div>
+</footer>
 
 </body>
 </html>

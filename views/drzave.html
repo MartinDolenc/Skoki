@@ -1,0 +1,30 @@
+%rebase('osnova.html', naslov='Drzave')
+<style>
+    #center{
+    width:300px;
+    margin-right: auto;
+    margin-left: auto;
+    }
+
+</style>
+
+<h1>Države, ki so bile zastopane na svetovnem pokalu.</h1>
+<div id="center">
+<table class="table table-bordered table-hover">
+ <thead class="thead-light">
+  <tr>
+     <th scope="col">Kratica</th>
+     <th scope="col">Polno ime</th>
+  </tr>
+  </thead>
+  <tbody>
+  %for (kratica,ime) in drzave:
+    <tr>
+        <td><a href="/drzava/{{kratica}}"><p><img class="imageWithText" src="/static/flags/{{kratica}}.png"> {{kratica}}</p></a></td>
+       <td>{{ime}}</td>
+    </tr>
+  %end
+  </tbody>
+</table>
+</div>
+</body>

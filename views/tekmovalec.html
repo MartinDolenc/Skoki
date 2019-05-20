@@ -1,0 +1,95 @@
+%rebase('osnova.html', naslov='Tekmovalec {}'.format(x))
+<style>
+    #podatki{
+    width:100%;
+    }
+
+    #razsirjene{
+    padding: 13px;
+    }
+</style>
+
+
+%if napaka:
+    <div class="alert alert-warning">{{napaka}}</div>
+%end
+
+%for (fis_code,status,ime,priimek,drzava,rojstvo,klub,smucke) in tekmovalec:
+    <div class="row">
+        <div class="col">
+          <h1 style="display:inline-block">{{ime}} {{priimek}}</h1>
+          % if admin:
+            <a href="/uredi_tekmovalca/{{x}}/" class="btn btn-dark btn-md active float-right" role="button" aria-pressed="true">Uredi</a>
+          % end
+        </div>
+    </div>
+    <div class="container rounded shadow" style="background-color: #f2f2f2">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel-body">
+                    <table id="podatki">
+                        <tr id="razsirjene">
+                            <th id="razsirjene">Fis code: </th>
+                            <th class="font-weight-normal" id="razsirjene">{{fis_code}} </th>
+                            <th id="razsirjene">Status: </th>
+                            <th class="font-weight-normal" id="razsirjene">{{status}} </th>
+                            <th id="razsirjene">Država: </th>
+                            <th class="font-weight-normal" id="razsirjene">{{drzava}} </th>
+                        </tr>
+                        <tr id="razsirjene">
+                            <th id="razsirjene">Rojstvo: </th>
+                            <th class="font-weight-normal" id="razsirjene">{{rojstvo}}</th>
+                            <th id="razsirjene">Klub: </th>
+                            <th class="font-weight-normal" id="razsirjene">{{klub}} </th>
+                            <th id="razsirjene">Smuči: </th>
+                            <th class="font-weight-normal" id="razsirjene">{{smucke}} </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+%end
+
+<div class="dropdown" style="float:right; margin-top:20px;">
+  <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" align="right">
+    Razvrščanje
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="/tekmovalec/{{x}}/Datum-ASC">Datum - Starejše prej</a>
+    <a class="dropdown-item" href="/tekmovalec/{{x}}/Datum-DESC">Datum - Novejše prej</a>
+    <a class="dropdown-item" href="/tekmovalec/{{x}}/Kraj-ASC">Kraj - od A do Ž</a>
+    <a class="dropdown-item" href="/tekmovalec/{{x}}/Kraj-DESC">Kraj - od Ž do A</a>
+    <a class="dropdown-item" href="/tekmovalec/{{x}}/Drzava-ASC">Država - od A do Ž</a>
+    <a class="dropdown-item" href="/tekmovalec/{{x}}/Drzava-DESC">Država - od Ž do A</a>
+    <a class="dropdown-item" href="/tekmovalec/{{x}}/Tip_tekme-ASC">Tip tekme - od A do Ž</a>
+    <a class="dropdown-item" href="/tekmovalec/{{x}}/Tip_tekme-DESC">Tip tekme - od Ž do A</a>
+    <a class="dropdown-item" href="/tekmovalec/{{x}}/Ranki-DESC">Rank - padajoče</a>
+    <a class="dropdown-item" href="/tekmovalec/{{x}}/Ranki-ASC">Rank - naraščajoče</a>
+  </div>
+</div>
+
+
+<table class="table table-bordered table-hover" style="margin-top:30px;">
+ <thead class="thead-light">
+  <tr>
+     <th scope="col">Datum</th>
+     <th scope="col">Kraj</th>
+     <th scope="col">Država</th>
+     <th scope="col">Tip tekme</th>
+     <th scope="col">Rank</th>
+  </tr>
+  </thead>
+  <tbody>
+  %for (datum,kraj,drzava,tip_tekme,rank) in tekme:
+    <tr>
+       <td>{{datum}}</a></td>
+       <td>{{kraj}}</td>
+        <td><a href="/drzava/{{drzava}}"><p><img class="imageWithText" src="/static/flags/{{drzava}}.png"> {{drzava}}</p></a></td>
+       <td>{{tip_tekme}}</td>
+       <td>{{rank}}</td>
+    </tr>
+  %end
+  </tbody>
+</table>
+</body>

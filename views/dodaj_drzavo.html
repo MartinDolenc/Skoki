@@ -1,0 +1,17 @@
+%rebase('osnova.html', naslov='Dodajanje drzave')
+
+%if napaka:
+  <p class="opozorilo">{{napaka}}</p>
+%end
+
+  <form action="/dodaj_drzavo" method="POST">
+      <div class="form-group">
+        <label>Kratica imena države</label>
+        <input type="text" name="kratica" value="{{kratica}}" class="form-control" placeholder="Primer: SLO" required="true">
+      </div>
+      <div class="form-group">
+        <label>Ime države</label>
+        <input type="text" name="ime" value="{{ime}}" class="form-control" placeholder="Primer: Slovenija" required="true">
+      </div>
+      <button type="submit" class="btn btn-primary">Dodaj</button>
+  </form>

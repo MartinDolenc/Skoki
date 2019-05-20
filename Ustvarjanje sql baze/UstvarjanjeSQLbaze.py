@@ -15,7 +15,7 @@ def text(tag):
         parts.insert(0, ' ')
     return re.sub(r'\s+', ' ', ''.join(filter(None, parts)))
 
-baza = 'Skoki_test_2009-19.db'
+baza = 'Skoki_test_ali_2020.db'
 
 drzavaDrzava = []
 
@@ -362,15 +362,14 @@ def dobiTekmovalcaIzTekme(sezLinku):
         if drzavaTekmovalca not in drzavaDrzava:
             drzavaDrzava.append(drzavaTekmovalca)
 
+sezona = 2019
+print(sezona)
 
-for sezona in range(2009, 2020):
-    print(sezona)
+link = "https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=" + str(sezona) + "&categorycode=WC&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=X-" + str(sezona) + "&saveselection=-1&seasonselection="
 
-    link = "https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?eventselection=&place=&sectorcode=JP&seasoncode=" + str(sezona) + "&categorycode=WC&disciplinecode=&gendercode=M&racedate=&racecodex=&nationcode=&seasonmonth=X-" + str(sezona) + "&saveselection=-1&seasonselection="
+stran = html.fromstring(requests.get(link).content)
 
-    stran = html.fromstring(requests.get(link).content)
-
-    sestaviBazo(stran)
+sestaviBazo(stran)
 
 
 raw_dataT = {'FIS CODE' : fisCodeTekmovalcev, 'STATUS' : statusTekmovalcev, 'IME' : imeTekmovalcev, 'PRIIMEK' : priimekTekmovalcev,

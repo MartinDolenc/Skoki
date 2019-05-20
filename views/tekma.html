@@ -1,0 +1,134 @@
+%rebase('osnova.html', naslov='Rezultati tekme {}'.format(x))
+
+<h1>{{kraj}}, {{datum}}</h1>
+
+%if napaka:
+        <div class="alert alert-warning">{{napaka}}</div>
+%end
+
+<!-- Search form -->
+<form class="form-inline" method="post">
+    <input class="form-control form-control-sm mr-3 w-25" type="text" placeholder="Search" aria-label="Search" name="search">
+    <i class="fas fa-search" aria-hidden="true"></i>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24" focusable="false"
+         data-toggle="popover" data-trigger="hover" data-placement="right" data-html="true"
+         data-content="Napredno iskanje:
+         <br/>'Ime stolpca' : 'iskalni parameter'
+         <br/>Na primer:
+         <br/>Fis code : 5658
+         <br/>Ime : Peter">
+        <circle cx="10.5" cy="10.5" r="7.5"/><path d="M21 21l-5.2-5.2"/></svg>
+</form>
+
+%if urejanje:
+    <div class="dropdown" style="float:right;">
+      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" align="right">
+        Razvrščanje
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="/tekma/{{x}}/ranki-DESC">Rank - padajoče</a>
+        <a class="dropdown-item" href="/tekma/{{x}}/ranki-ASC">Rank - naraščajoče</a>
+        %if ekipna:
+            <a class="dropdown-item" href="/tekma/{{x}}/mesto_v_ekipi-DESC">Mesto v ekipi - padajoče</a>
+            <a class="dropdown-item" href="/tekma/{{x}}/mesto_v_ekipi-ASC">Mesto v ekipi - naraščajoče</a>
+        %else:
+            <a class="dropdown-item" href="/tekma/{{x}}/startna_stevilka-DESC">Startna številka - padajoče</a>
+            <a class="dropdown-item" href="/tekma/{{x}}/startna_stevilka-ASC">Startna številka - naraščajoče</a>
+        %end
+        <a class="dropdown-item" href="/tekma/{{x}}/fis_code-DESC">Fis code - padajoče</a>
+        <a class="dropdown-item" href="/tekma/{{x}}/fis_code-ASC">Fis code - naraščajoče</a>
+        <a class="dropdown-item" href="/tekma/{{x}}/ime-ASC">Ime - od A do Ž</a>
+        <a class="dropdown-item" href="/tekma/{{x}}/ime-DESC">Ime - od Ž do A</a>
+        <a class="dropdown-item" href="/tekma/{{x}}/priimek-ASC">Priimek - od A do Ž</a>
+        <a class="dropdown-item" href="/tekma/{{x}}/priimek-DESC">Priimek - od Ž do A</a>
+        <a class="dropdown-item" href="/tekma/{{x}}/drzava-ASC">Država - od A do Ž</a>
+        <a class="dropdown-item" href="/tekma/{{x}}/drzava-DESC">Država - od Ž do A</a>
+        %if serija:
+            <a class="dropdown-item" href="/tekma/{{x}}/skoki1-DESC">1. skok - padajoče</a>
+            <a class="dropdown-item" href="/tekma/{{x}}/skoki1-ASC">1. skok - naraščajoče</a>
+            <a class="dropdown-item" href="/tekma/{{x}}/tocke1-DESC">1. točke - padajoče</a>
+            <a class="dropdown-item" href="/tekma/{{x}}/tocke1-ASC">1. točke - naraščajoče</a>
+            <a class="dropdown-item" href="/tekma/{{x}}/skoki2-DESC">2. skok - padajoče</a>
+            <a class="dropdown-item" href="/tekma/{{x}}/skoki2-ASC">2. skok - naraščajoče</a>
+            <a class="dropdown-item" href="/tekma/{{x}}/tocke2-DESC">2. točke - padajoče</a>
+            <a class="dropdown-item" href="/tekma/{{x}}/tocke2-ASC">2. točke - naraščajoče</a>
+            %if not ekipna:
+                <a class="dropdown-item" href="/tekma/{{x}}/tocke-DESC">Skupne točke - padajoče</a>
+                <a class="dropdown-item" href="/tekma/{{x}}/tocke-ASC">Skupne točke - naraščajoče</a>
+            %end
+        %else:
+            <a class="dropdown-item" href="/tekma/{{x}}/tocke-DESC">Točke - padajoče</a>
+            <a class="dropdown-item" href="/tekma/{{x}}/tocke-ASC">Točke - naraščajoče</a>
+        %end
+      </div>
+    </div>
+%end
+
+ <table class="table table-bordered table-hover">
+ <thead class="thead-light">
+  <tr>
+     <th>Rank</th>
+     % if ekipna:
+        <th>Mesto v ekipi</th>
+     % else:
+        <th>Startna številka</th>
+     % end
+     <th>FIS code</th>
+     <th>Ime</th>
+     <th>Priimek</th>
+     <th>Država</th>
+     % if serija:
+        <th>1. skok</th>
+        <th>1. točke</th>
+        <th>2. skok</th>
+        <th>2. točke</th>
+        % if not ekipna:
+            <th>Skupne točke</th>
+        %end
+     % else:
+        <th>Točke</th>
+     % end
+  </tr>
+ </thead>
+     <tbody>
+  % if serija:
+    %for (ranki,startna_stevilka,fis_code,ime,priimek,drzava,skoki1,tocke1,skoki2,tocke2,tocke,mesto_v_ekipi) in tekma:
+        <tr>
+            <td>{{ranki}}</td>
+            % if ekipna:
+                <td>{{mesto_v_ekipi}}</td>
+            % else:
+                <td>{{startna_stevilka}}</td>
+            % end
+            <td><a href="/tekmovalec/{{fis_code}}/Datum-DESC">{{fis_code}}</a></td>
+            <td>{{ime}}</td>
+            <td>{{priimek}}</td>
+            <td><a href="/drzava/{{drzava}}"><p><img class="imageWithText" src="/static/flags/{{drzava}}.png"> {{drzava}}</p></a></td>
+            <td>{{skoki1}}</td>
+            <td>{{tocke1}}</td>
+            <td>{{skoki2}}</td>
+            <td>{{tocke2}}</td>
+            % if not ekipna:
+                <td>{{tocke}}</td>
+            % end
+        </tr>
+    %end
+  % else:
+    %for (ranki,startna_stevilka,fis_code,ime,priimek,drzava,tocke,mesto_v_ekipi) in tekma:
+        <tr>
+            <td>{{ranki}}</td>
+            % if ekipna:
+                <td>{{mesto_v_ekipi}}</td>
+            % else:
+                <td>{{startna_stevilka}}</td>
+            % end
+            <td><a href="/tekmovalec/{{fis_code}}/Datum-DESC">{{fis_code}}</a></td>
+            <td>{{ime}}</td>
+            <td>{{priimek}}</td>
+            <td><a href="/drzava/{{drzava}}"><p><img class="imageWithText" src="/static/flags/{{drzava}}.png"> {{drzava}}</p></a></td>
+            <td>{{tocke}}</td>
+        </tr>
+    %end
+  %end
+     </tbody>
+  </table>

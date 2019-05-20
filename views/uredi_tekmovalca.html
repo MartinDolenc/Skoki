@@ -1,0 +1,59 @@
+%rebase('osnova.html', naslov='Urejanje tekmovalca {}'.format(x))
+
+%if napaka:
+  <p class="opozorilo">{{napaka}}</p>
+%end
+
+  <form action="/uredi_tekmovalca/{{x}}/" method="POST">
+      <div class="form-group">
+        <label>FIS code</label>
+        <input type="integer" name="fis_code" value="{{fis_code}}" class="form-control" placeholder="{{fis_code}}" disabled>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Ime</label>
+            <input type="text" name="ime" value="{{ime}}" class="form-control" placeholder="{{ime}}" disabled>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Priimek</label>
+            <input type="text" name="priimek" value="{{priimek}}" class="form-control" placeholder="{{priimek}}" disabled>
+        </div>
+      </div>
+      <div class="form-group">
+            <label>Država</label>
+            <select type="text" name="drzava" value="{{drzava}}" class="form-control" required="true">
+                <option>{{drzava}}</option>
+                %for (kratica,ime) in drzave:
+                    % if kratica != drzava:
+                        <option>{{kratica}}</option>
+                    % end
+                %end
+            </select>
+            <p><a class="form-text text-muted small" href="/dodaj_drzavo">Če želene države še ni med možnostmi, najprej izpolni obrazec in jo dodaj.</a></p>
+      </div>
+      <div class="form-group">
+        <label>Rojstvo</label>
+        <input type="text" name="rojstvo" value="{{rojstvo}}" class="form-control" placeholder="{{rojstvo}}" required="true">
+        <small id="emailHelp" class="form-text text-muted">DD-MM-YYYY ali YYYY</small>
+      </div>
+      <div class="form-group">
+        <label>Klub</label>
+        <input type="text" name="klub" value="{{klub}}" class="form-control" placeholder="{{klub}}">
+      </div>
+      <div class="form-group">
+        <label>Smuči</label>
+        <input type="text" name="smucke" value="{{smucke}}" class="form-control" placeholder="{{smucke}}">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select type="text" name="status" value="{{status}}" class="form-control" required="true">
+            <option>{{status}}</option>
+            % if status == "Active":
+                <option>Not active</option>
+            % else:
+                <option>Active</option>
+            % end
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Uredi</button>
+  </form>

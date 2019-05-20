@@ -1,30 +1,79 @@
 %rebase('osnova.html', naslov='Tekmovalci')
 
-  <table cellpadding="0" cellspacing="0" border="1">
+<h1>Tekmovalci</h1>
+
+<body>
+%if napaka:
+        <div class="alert alert-warning">{{napaka}}</div>
+%end
+
+<!-- Search form -->
+<form class="form-inline" method="post">
+    <input class="form-control form-control-sm mr-3 w-25" type="text" placeholder="Search" aria-label="Search" name="search">
+    <i class="fas fa-search" aria-hidden="true"></i>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24" focusable="false"
+         data-toggle="popover" data-trigger="hover" data-placement="right" data-html="true"
+         data-content="Napredno iskanje:
+         <br/>'Ime stolpca' : 'iskalni parameter'
+         <br/>Na primer:
+         <br/>Fis code : 5658
+         <br/>Ime : Peter">
+        <circle cx="10.5" cy="10.5" r="7.5"/><path d="M21 21l-5.2-5.2"/></svg>
+</form>
+
+%if urejanje:
+    <div class="dropdown" style="float:right;">
+      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" align="right">
+        Razvrščanje
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="/tekmovalci/Fis_code-DESC">FIS code - padajoče</a>
+        <a class="dropdown-item" href="/tekmovalci/Fis_code-ASC">FIS code - naraščajoče</a>
+        <a class="dropdown-item" href="/tekmovalci/Status-ASC">Status - od A do Ž</a>
+        <a class="dropdown-item" href="/tekmovalci/Status-DESC">Status - od Ž do A</a>
+        <a class="dropdown-item" href="/tekmovalci/Ime-ASC">Ime - od A do Ž</a>
+        <a class="dropdown-item" href="/tekmovalci/Ime-DESC">Ime - od Ž do A</a>
+        <a class="dropdown-item" href="/tekmovalci/Priimek-ASC">Priimek - od A do Ž</a>
+        <a class="dropdown-item" href="/tekmovalci/Priimek-DESC">Priimek - od Ž do A</a>
+        <a class="dropdown-item" href="/tekmovalci/Drzava-ASC">Država - od A do Ž</a>
+        <a class="dropdown-item" href="/tekmovalci/Drzava-DESC">Država - od Ž do A</a>
+        <a class="dropdown-item" href="/tekmovalci/Rojstvo-DESC">Rojstvo - Starejši prej</a>
+        <a class="dropdown-item" href="/tekmovalci/Rojstvo-ASC">Rojstvo - Mlajši prej</a>
+        <a class="dropdown-item" href="/tekmovalci/Klub-ASC">Klub - od A do Ž</a>
+        <a class="dropdown-item" href="/tekmovalci/Klub-DESC">Klub - od Ž do A</a>
+        <a class="dropdown-item" href="/tekmovalci/Smucke-ASC">Smučke - od A do Ž</a>
+        <a class="dropdown-item" href="/tekmovalci/Smucke-DESC">Smučke - od Ž do A</a>
+      </div>
+    </div>
+%end
+
+<table class="table table-bordered table-hover">
+ <thead class="thead-light">
   <tr>
-     <th>FIS code</th>
-     <th>Status</th>
-     <th>Ime</th>
-     <th>Priimek</th>
-     <th>Država</th>
-     <th>Rojstvo</th>
-     <th>Klub</th>
-     <th>Smučke</th>
+     <th scope="col">FIS code</th>
+     <th scope="col">Status</th>
+     <th scope="col">Ime</th>
+     <th scope="col">Priimek</th>
+     <th scope="col">Država</th>
+     <th scope="col">Rojstvo</th>
+     <th scope="col">Klub</th>
+     <th scope="col">Smučke</th>
   </tr>
+  </thead>
+  <tbody>
   %for (fis_code,status,ime,priimek,drzava,rojstvo,klub,smucke) in tekmovalci:
     <tr>
-       <td>{{fis_code}}</td>
+       <td><a href="/tekmovalec/{{fis_code}}/Datum-DESC">{{fis_code}}</a></td>
        <td>{{status}}</td>
        <td>{{ime}}</td>
        <td>{{priimek}}</td>
-       <td>{{drzava}}</td>
+       <td><a href="/drzava/{{drzava}}"><p><img class="imageWithText" src="/static/flags/{{drzava}}.png"> {{drzava}}</p></a></td>
        <td>{{rojstvo}}</td>
        <td>{{klub}}</td>
        <td>{{smucke}}</td>
     </tr>
   %end
-  </table>
-
-  <p>
-    <a href="/dodaj_tekmovalca">Dodaj tekmovalca</a>
-  </p>
+  </tbody>
+</table>
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+</body>

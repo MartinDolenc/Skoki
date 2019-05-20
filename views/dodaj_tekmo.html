@@ -1,0 +1,41 @@
+%rebase('osnova.html', naslov='Dodajanje tekme')
+
+%if napaka:
+  <p class="opozorilo">{{napaka}}</p>
+%end
+
+  <form action="/dodaj_tekmo" method="POST">
+      <div class="form-group">
+        <label>ID</label>
+        <input type="integer" name="id" value="{{id}}" class="form-control" placeholder="ID" required="true">
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Kraj</label>
+            <input type="text" name="kraj" value="{{kraj}}" class="form-control" placeholder="Kraj" required="true">
+        </div>
+        <div class="form-group col-md-6">
+            <label>Država</label>
+            <select type="text" name="drzava" value="" class="form-control" required="true">
+                <option value="" selected disabled hidden>Država</option>
+                %for (kratica,ime) in drzave:
+                    <option>{{kratica}}</option>
+                %end
+            </select>
+            <p><a class="form-text text-muted small" href="/dodaj_drzavo">Če želene države še ni med možnostmi, najprej izpolni obrazec in jo dodaj.</a></p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Datum</label>
+        <input type="date" name="datum" value="{{datum}}" class="form-control" placeholder="Datum" required="true">
+      </div>
+      <div class="form-group">
+        <label>Tip tekme</label>
+        <select type="text" name="tip_tekme" value="{{tip_tekme}}" class="form-control" required="true">
+            <option value="" selected disabled hidden>posamicna/ekipna</option>
+            <option>posamicna</option>
+            <option>ekipna</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Dodaj</button>
+  </form>

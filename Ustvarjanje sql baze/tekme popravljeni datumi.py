@@ -15,7 +15,7 @@ def text(tag):
         parts.insert(0, ' ')
     return re.sub(r'\s+', ' ', ''.join(filter(None, parts)))
 
-baza = 'Skoki_test_2009-19.db'
+baza = 'Skoki_test_ali_2020.db'
 
 drzavaDrzava = []
 
@@ -115,7 +115,7 @@ for sezona in range(2009, 2020):
         l = d.split()
         novi_datumi.append(l[2] + dat_dict.get(l[1]) + l[0])
 
-    '''
+
     print(popravljeni_datumi)
     print(novi_datumi)
 
@@ -126,7 +126,6 @@ for sezona in range(2009, 2020):
     print(tip_tekme)
 
     print(len(id), len(kraj), len(novi_datumi), len(drzava), len(tip_tekme))
-'''
 
     raw_data = {'ID': id, 'KRAJ': kraj, 'DATUM': novi_datumi, 'DRZAVA': drzava, 'TIP TEKME' : tip_tekme}
 

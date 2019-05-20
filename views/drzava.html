@@ -1,0 +1,153 @@
+%rebase('osnova.html', naslov='{} ({})'.format(ime, x))
+<style>
+    *{
+    margin:0;
+    padding:0;
+    }
+
+    #zunanji{
+    display: inlineblock;
+    margin-top: 30px;
+    }
+
+    #desni{
+    float:right;
+    width:700px;
+    height:500px;
+    }
+
+    #levi{
+    float:left;
+    width:300px;
+    height:1500px;
+    }
+
+    #tabela{
+    height:400px;
+    overflow-y: auto;
+    overflow-x: auto;
+    }
+
+    #tabela_pokoncna{
+    height:750px;
+    overflow-y: auto;
+    overflow-x: auto;
+    }
+
+
+</style>
+
+<h1> {{ime}} ({{x}})</h1>
+<div id="zunanji">
+    <div id="levi">
+         <h3>Število doseženih mest na posamičnih tekmah v sezonah 2009-2019.</h3>
+         <p>Če je pred vami prazna tabela, to pomeni, da tekmovalci iz te države, še nimajo uvrstitve na posamičnih tekmah.</p>
+         <div id="tabela_pokoncna">
+            <table class="table table-bordered table-hover">
+             <thead class="thead-light">
+              <tr>
+                 <th>Mesto</th>
+                 <th>Število doseženih</th>
+              </tr>
+             </thead>
+             <tbody>
+              %for (mesto,stevilo) in mesta:
+                <tr>
+                   <td>{{mesto}}</td>
+                   <td>{{stevilo}}</td>
+                </tr>
+              %end
+             </tbody>
+         </table>
+         </div>
+    </div>
+
+    <div id="desni">
+        <h3>Vsi tekmovalci, ki so že zastopali svojo državo v svetovnem pokalu.</h3>
+        <div id="tabela">
+            <table class="table table-bordered table-hover">
+                  <thead class="thead-light">
+                      <tr>
+                         <th scope="col">FIS code</th>
+                         <th scope="col">Status</th>
+                         <th scope="col">Ime</th>
+                         <th scope="col">Priimek</th>
+                         <th scope="col">Rojstvo</th>
+                         <th scope="col">Klub</th>
+                         <th scope="col">Smučke</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  %for (fis_code,status,ime,priimek,drzava,rojstvo,klub,smucke) in tekmovalci:
+                    <tr>
+                       <td><a href="/tekmovalec/{{fis_code}}/Datum-DESC">{{fis_code}}</a></td>
+                       <td>{{status}}</td>
+                       <td>{{ime}}</td>
+                       <td>{{priimek}}</td>
+                       <td>{{rojstvo}}</td>
+                       <td>{{klub}}</td>
+                       <td>{{smucke}}</td>
+                    </tr>
+                  %end
+                  </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="desni">
+        <h3>Zadnja ekipna tekma: {{kraj}}, {{datum}}</h3>
+        <div id="tabela">
+             <table class="table table-bordered table-hover">
+                  <thead class="thead-light">
+                      <tr>
+                          <th>Rank</th>
+                          <th>Mesto v ekipi</th>
+                          <th>FIS code</th>
+                          <th>Ime</th>
+                          <th>Priimek</th>
+                          <th>Država</th>
+                          % if serija:
+                             <th>1. skok</th>
+                             <th>1. točke</th>
+                             <th>2. skok</th>
+                             <th>2. točke</th>
+                          % else:
+                             <th>Točke</th>
+                          % end
+                      </tr>
+                  </thead>
+                  <tbody>
+                  % if serija:
+                    %for (ranki,startna_stevilka,fis_code,ime,priimek,drzava,skoki1,tocke1,skoki2,tocke2,mesto_v_ekipi) in tekma:
+                        <tr>
+                            <td>{{ranki}}</td>
+                            <td>{{mesto_v_ekipi}}</td>
+                            <td><a href="/tekmovalec/{{fis_code}}/Datum-DESC">{{fis_code}}</a></td>
+                            <td>{{ime}}</td>
+                            <td>{{priimek}}</td>
+                            <td><a href="/drzava/{{drzava}}"><p><img class="imageWithText" src="/static/flags/{{drzava}}.png">{{drzava}}</p></a></td>
+                            <td>{{skoki1}}</td>
+                            <td>{{tocke1}}</td>
+                            <td>{{skoki2}}</td>
+                            <td>{{tocke2}}</td>
+                        </tr>
+                    %end
+                  % else:
+                    %for (ranki,startna_stevilka,fis_code,ime,priimek,drzava,tocke,mesto_v_ekipi) in tekma:
+                        <tr>
+                            <td>{{ranki}}</td>
+                            <td>{{mesto_v_ekipi}}</td>
+                            <td><a href="/tekmovalec/{{fis_code}}/Datum-DESC">{{fis_code}}</a></td>
+                            <td>{{ime}}</td>
+                            <td>{{priimek}}</td>
+                            <td><a href="/drzava/{{drzava}}"><p><img class="imageWithText" src="/static/flags/{{drzava}}.png">{{drzava}}</p></a></td>
+                            <td>{{tocke}}</td>
+                        </tr>
+                    %end
+                  %end
+                  </tbody>
+             </table>
+        </div>
+    </div>
+
+</div>

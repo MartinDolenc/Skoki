@@ -1,0 +1,183 @@
+%rebase('osnova.html', naslov='Zanimivosti')
+<style>
+    .button {
+      background-color: #008CBA;
+      border: none;
+      color: white;
+      padding: 15px 15px;
+      text-align: center;
+      font-size: 12px;
+      cursor: pointer;
+      width: 50px;
+      height: 50px;
+      margin: 20px 20px;
+    }
+</style>
+
+
+%if napaka:
+  <p class="opozorilo">{{napaka}}</p>
+%end
+
+<h2>Seznam zanimivosti</h2>
+
+<ul style="list-style-type:circle;">
+    <li><a href="/zanimivosti/1">Tekmovalci, ki so zastopali izbrano državo v izbranem obdobju.</a></li>
+    <li><a href="/zanimivosti/2">Primerjava rezultatov dveh poljubnih tekmovalcev</a></li>
+  <li>Milk</li>
+</ul>
+
+
+%if zanimivost == 1:
+<h1>Tekmovalci, ki so zastopali izbrano državo v svetovnem pokalu v izbranem obdobju.</h1>
+<p>Izbira "SLO 2018 2019" bo vrnila tabelo, v kateri bodo zapisani vsi tekmovalci, ki so zastopali Slovenijo v svetovnem pokalu vsaj na eni tekmi, ki je potekala v sezoni 2018 ali v sezoni 2019.</p>
+  <form action="/zanimivosti/1" method="POST">
+      <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Izberi državo</label>
+            <select type="text" name="drzava" value="" class="form-control" required="true">
+                %for (kratica,ime) in drzave:
+                    <option>{{kratica}}</option>
+                %end
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Začetna sezona</label>
+            <select type="integer" name="sezona1" value="" class="form-control" required="true">
+                %for (sezona) in sezone:
+                    <option>{{sezona}}</option>
+                %end
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Končna sezona</label>
+            <select type="integer" name="sezona2" value="" class="form-control" required="true">
+                %for (sezona) in sezone:
+                    <option>{{sezona}}</option>
+                %end
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Išči</button>
+        %if izpis:
+          <button type="button" data-toggle="modal" data-target="#exampleModal1">
+              Prikaži
+          </button>
+        %end
+      </div>
+  </form>
+
+
+    <div class="container">
+        <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" style="overflow-x: auto; overflow-y:auto;width:800px;height:500px;">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">REZULTAT:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+                <table class="table table-bordered table-hover">
+                 <thead class="thead-light">
+                  <tr>
+                     <th scope="col">FIS code</th>
+                     <th scope="col">Status</th>
+                     <th scope="col">Ime</th>
+                     <th scope="col">Priimek</th>
+                     <th scope="col">Država</th>
+                     <th scope="col">Rojstvo</th>
+                     <th scope="col">Klub</th>
+                     <th scope="col">Smučke</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  %for (fis_code,status,ime,priimek,drzava,rojstvo,klub,smucke) in tekmovalci:
+                    <tr>
+                       <td><a href="/tekmovalec/{{fis_code}}/Datum-DESC">{{fis_code}}</a></td>
+                       <td>{{status}}</td>
+                       <td>{{ime}}</td>
+                       <td>{{priimek}}</td>
+                       <td><a href="/drzava/{{drzava}}"><p><img class="imageWithText" src="/static/flags/{{drzava}}.png"> {{drzava}}</p></a></td>
+                       <td>{{rojstvo}}</td>
+                       <td>{{klub}}</td>
+                       <td>{{smucke}}</td>
+                    </tr>
+                  %end
+                  </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+    </div>
+%end
+
+%if zanimivost ==2:
+    <h1>Izberi si dva tekmovalca in primerjaj njune uvrstitve.</h1>
+    <p>Pri določeni izbiri bo izpisalo tabelo, v kateri bodo tekme in dodaten stolpec s tekmovalcem, ki je na tej tekmi imel boljši rezultat.</p>
+      <form action="/zanimivosti/2" method="POST">
+          <div class="form-row">
+            <div class="form-group col-md-3">
+                <label>Tekmovalec 1</label>
+                <select type="text" name="tekmovalec1" value="" class="form-control" required="true">
+                    %for (id,ime,priimek) in vsi_tekmovalci:
+                        <option>{{id}} - {{priimek}} {{ime}}</option>
+                    %end
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Tekmovalec 2</label>
+                <select type="text" name="tekmovalec2" value="" class="form-control" required="true">
+                    %for (id,ime,priimek) in vsi_tekmovalci:
+                        <option>{{id}} - {{priimek}} {{ime}}</option>
+                    %end
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Išči</button>
+            %if izpis:
+              <button type="button" data-toggle="modal" data-target="#exampleModal2">
+                  Prikaži
+              </button>
+            %end
+          </div>
+      </form>
+
+
+        <div class="container">
+            <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" style="overflow-x: auto; overflow-y:auto;width:800px;height:500px;">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">REZULTAT:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                    <table class="table table-bordered table-hover">
+                     <thead class="thead-light">
+                      <tr>
+                         <th>ID</th>
+                         <th>Kraj</th>
+                         <th>Datum</th>
+                         <th>Država</th>
+                         <th>Tip tekme</th>
+                         <th>Boljši tekmovalec</th>
+                      </tr>
+                     </thead>
+                         <tbody>
+                      %for (id,kraj,datum,drzava,tip_tekme,boljsi) in tekme_boljsi:
+                        <tr>
+                           <td><a href="/tekma/{{id}}/ranki-ASC">{{id}}</a></td>
+                           <td>{{kraj}}</td>
+                           <td>{{datum}}</td>
+                           <td><a href="/drzava/{{drzava}}"><p><img class="imageWithText" src="/static/flags/{{drzava}}.png"> {{drzava}}</p></a></td>
+                           <td>{{tip_tekme}}</td>
+                           <td>{{boljsi}}</td>
+                        </tr>
+                      %end
+                         </tbody>
+                      </table>
+                </div>
+              </div>
+            </div>
+        </div>
+%end

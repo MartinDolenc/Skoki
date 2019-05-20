@@ -1,24 +1,44 @@
 %rebase('osnova.html', naslov='Tekme v sezoni {}'.format(x))
 
-  <table cellpadding="0" cellspacing="0" border="1">
+<h1>Tekme v sezoni {{x}}</h1>
+
+<div class="dropdown" style="float:right;">
+  <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" align="right">
+    Razvrščanje
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="/tekme/{{x}}/ID-DESC">ID - padajoče</a>
+    <a class="dropdown-item" href="/tekme/{{x}}/ID-ASC">ID - naraščajoče</a>
+    <a class="dropdown-item" href="/tekme/{{x}}/Kraj-ASC">Kraj - od A do Ž</a>
+    <a class="dropdown-item" href="/tekme/{{x}}/Kraj-DESC">Kraj - od Ž do A</a>
+    <a class="dropdown-item" href="/tekme/{{x}}/Datum-ASC">Datum - Starejši naprej</a>
+    <a class="dropdown-item" href="/tekme/{{x}}/Datum-DESC">Datum- Novejši naprej</a>
+    <a class="dropdown-item" href="/tekme/{{x}}/Drzava-ASC">Država - od A do Ž</a>
+    <a class="dropdown-item" href="/tekme/{{x}}/Drzava-DESC">Država - od Ž do A</a>
+    <a class="dropdown-item" href="/tekme/{{x}}/Tip_tekme-ASC">Ekipne tekme naprej</a>
+    <a class="dropdown-item" href="/tekme/{{x}}/Tip_tekme-DESC">Posamične tekme naprej</a>
+  </div>
+</div>
+
+ <table class="table table-bordered table-hover">
+ <thead class="thead-light">
   <tr>
      <th>ID</th>
      <th>Kraj</th>
      <th>Datum</th>
-     <th>Država</th> 
-     <th>Tip tekme</th> 
+     <th>Država</th>
+     <th>Tip tekme</th>
   </tr>
+ </thead>
+     <tbody>
   %for (id,kraj,datum,drzava,tip_tekme) in tekme:
     <tr>
-       <td>{{id}}</td>
+       <td><a href="/tekma/{{id}}/ranki-ASC">{{id}}</a></td>
        <td>{{kraj}}</td>
        <td>{{datum}}</td>
-       <td>{{drzava}}</td>
+        <td><a href="/drzava/{{drzava}}"><p><img class="imageWithText" src="/static/flags/{{drzava}}.png"> {{drzava}}</p></a></td>
        <td>{{tip_tekme}}</td>
     </tr>
   %end
+     </tbody>
   </table>
-
-  <p>
-    <a href="/">Tekmovalci</a>
-  </p>
